@@ -1,0 +1,697 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1 maximum-scale=2, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Add to Home">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-rim-auto-match" content="none">
+    <title>飞天茅台</title>
+    <!-- 网站的ico图标 -->
+    <!-- <link rel="shortcut icon" href="images/favicon.jpg" type="image/x-icon"> -->
+    <link rel="stylesheet" type="text/css" href="css/swiper-4.1.0.min.css">
+    <link rel="stylesheet" href="css/activity.css" />
+    <link rel="stylesheet" href="css/vat2.9.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/c.vue.min.js"></script>
+    <script type="text/javascript" src="js/swiper-4.1.0.min.js"></script>
+    <script type="text/javascript" src="js/vat2.9.min.js"></script>
+    <script type="text/javascript" src="js/city.js"></script>
+    <script type="text/javascript" src="js/c.jquery1.8.3.min.js"></script>
+    <script>
+        (function(doc, win) {
+	var docEl = doc.documentElement,
+		resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+		recalc = function() {
+			var clientWidth = docEl.clientWidth;
+			if(clientWidth >= 750) {
+				clientWidth = 750;
+			};
+			if(clientWidth <= 320) {
+				clientWidth = 320;
+			}
+			if(!clientWidth) return;
+			docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+		};
+	if(!doc.addEventListener) return;
+	win.addEventListener(resizeEvt, recalc, false);
+	doc.addEventListener('DOMContentLoaded', recalc, false);
+})(document, window);
+    </script>
+</head>
+
+<body>
+    <div class="" id="rushBuy">
+        <div id="loading" v-show="loading"></div>
+        <header class="header">
+            <div class="tips" v-show="tipsType">{{tipsText}}</div>
+            <div class="overflowd">
+                <div class="swiper-container swiper-container1">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" v-for="item in picList">
+                            <img :src="item" class="rtb_pic">
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </header>
+        <div class="rtb_cont">
+            <div class="rtb_djs clearfix">
+                <div class="rtb_djs_fl fl clearfix">
+                    <div class="rtb_djs_moy fl">￥{{price}}</div>
+                    <div class="rtb_djs_ts fl">
+                        <div class="rtb_djs_ms">秒杀中</div>
+                        <div class="rtb_djs_mnum">已售{{soldNum}}件</div>
+                    </div>
+                </div>
+                <div class="rtb_djs_fr fr">
+                    <div class="rtb_djs_hd">活动倒计时</div>
+                    <div class="rtb_djs_time">
+                        <span class="rtb_djs_tn">{{countObj.h}}</span>
+                        <span class="rtb_djs_tx">时</span>
+                        <span class="rtb_djs_tn">{{countObj.m}}</span>
+                        <span class="rtb_djs_tx">分</span>
+                        <span class="rtb_djs_tn">{{countObj.s}}</span>
+                        <span class="rtb_djs_tx">秒</span>
+                    </div>
+                </div>
+            </div>
+            <div class="rtb_tit">{{remark}}</div>
+            <div class="rtb_news"><span class="rtb_xr">新人特权</span>运费险·优先发货·破损包赔</div>
+            <div class="rtb_bz clearfix">
+                <div class="fl bz">保障</div>
+                <div class="fl">
+                    <div class="rtb_zhen"><span class="zhen">真</span>酒厂直供<span class="zhen zheng">正</span>支持各种形式验货</div>
+                    <div class="rtb_zhen"><span class="zhen sheng">省</span>正品保证·货到付款</div>
+                </div>
+            </div>
+            <div class="rtb_wl clearfix">
+                <div class="fl">物流</div>
+                <div class="fl by">顺丰包邮</div>
+            </div>
+            <div class="rtb_btns clearfix">
+                <div class="fl byy">包邮</div>
+                <div class="fl buy">
+                    <a href="#buy" class="buy_bt">立即抢购</a>
+                </div>
+            </div>
+            <div class="rtb_sppj">
+                <div class="rtb_sp_tit">商品评价(8433)</div>
+                <div class="rtb_sp_hpl">好评率99%</div>
+                <div class="rtb_s_list clearfix">
+                    <div class="rtb_s_item fl" v-for="item in evaluateList">{{item}}</div>
+                </div>
+            </div>
+            <div class="rtb_sp_lists ">
+                <div class="swiper-container swiper-container2 swiper-no-swiping">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide rtb_spl_item" v-for="item in sppjList">
+                            <div class="rtb_spl_xx" :style="'background-image: url(' + item.headUrl + ')'">
+                                <div class="rtb_spl_phone">{{item.phone}}</div>
+                                <div class="rtb_spl_start"><span class="start"></span><span class="start"></span><span class="start"></span><span class="start" ></span><span class="start"></span></div>
+                            </div>
+                            <div class="rtb_spl_py">{{item.content}}</div>
+                            <div class="rtb_spl_pcs">
+                                <img v-for="picitem in item.imgUrl" :src="picitem" class="rtb_spl_pic">
+                            </div>
+                            <div class="rtb_spl_tm">
+                                <span class="rtb_spl_time">{{item.date}}</span>
+                                <span class="rtb_spl_name">{{item.setMeal}}</span>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="rtb_khpj">客户评价</div>
+            <div class="rtb_khpj_lists">
+                <div class="swiper-container swiper-container3 swiper-no-swiping">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide rtb_khpj_item" v-for="item in khpjList">
+                            <div class="rtb_khpj_tx">{{item.content}}</div>
+                            <div class="rtb_khpj_info">
+                                <span class="rtb_khpj_phone">{{item.phone}}</span>
+                                <span class="rtb_khpj_name">{{item.name}}发表评论</span>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+                <!-- <div class="rtb_khpj_item" v-for="item in khpjList">
+                    <div class="rtb_khpj_tx">{{item.text}}</div>
+                    <div class="rtb_khpj_info">
+                        <span class="rtb_khpj_phone">{{item.phone}}</span>
+                        <span class="rtb_khpj_name">{{item.name}}</span>
+                    </div>
+                </div> -->
+            </div>
+            <div class="rtb_cpxq">产品详情</div>
+            <div class="rtb_detail_list">
+                <img v-for="item in goodsList" :src="item" class="rtb_dl_pic">
+            </div>
+            <div class="video_big" v-if="videoUrl">
+                <div class="video_box">
+                    <video class="ab_viceo" id="video" webkit-playsinline="true" playsinline="true" controls="controls" >
+                        <source :src="videoUrl" type="video/mp4" >
+                    </video>
+                </div>
+            </div>
+            <div class="rtb_tst" v-html="salesDesc">
+                <!-- 感谢您参与“<span class="red">贵州茅台酒股份有限公司年末抢购</span>”活动每人仅限抢购1次，限购2箱，售完即止！请您详细填写订单信息，下单地址不详，则视为自动放弃抢购资格！ -->
+            </div>
+            <div class="rtb_khpj" id="buy">订单信息</div>
+            <div class="rtb_spxx">
+                <div class="rtb_spif_info">
+                    <div class="rtb_spif_tit">商品信息</div>
+                    <div class="rtb_spif_det" :style="'background-image: url(' + onlDetailUrl + ')'">
+                        <div class="rtb_det_tt">{{paenText}}</div>
+                        <div class="rtb_det_moy">￥{{paenMoney}}</div>
+                    </div>
+                </div>
+                <div class="rtb_spif_tcxz">
+                    <div class="rtb_tcxz_tit">套餐选择</div>
+                    <div class="rtb_tcxz_list">
+                        <div class="rtb_tcxz_item" v-for="(item, index) in paenStauList" :class="{on:currenIndex==index}" @click="choseTc(item, index)">{{item.name}}</div>
+                    </div>
+                </div>
+                <div class="rtb_spif_buyn clearfix">
+                    <div class="rtb_by_t fl">购买数量</div>
+                    <div class="rtb_by_ad fr">
+                        <span class="jian" @click="clickJian">-</span>
+                        <span class="num">{{paenNum}}</span>
+                        <span class="jian jia" @click="clickAdd">+</span>
+                    </div>
+                </div>
+            </div>
+            <div class="rtb_address">
+                <div class="rtb_aress_item">
+                    <div class="rtb_aress_label">姓名</div>
+                    <input type="text" placeholder="请输入收货姓名" v-model="name" class="rtb_aress_input" />
+                </div>
+                <div class="rtb_aress_item">
+                    <div class="rtb_aress_label">手机号码</div>
+                    <input type="text" placeholder="请输入手机号码" v-model="phone" class="rtb_aress_input" maxlength="11" />
+                </div>
+                <div class="rtb_aress_item">
+                    <div class="rtb_aress_label">所在地区</div>
+                    <div class="rtb_aress_citys clearfix">
+                        <div class="fl ciy" :class="{hui:cityInfo.c=='请选择省份'}" @click="clickCity1">{{cityInfo.c}}</div>
+                        <div class="fl ciy" :class="{hui:cityInfo.i=='请选择城市'}" @click="clickCity2">{{cityInfo.i}}</div>
+                        <div class="fl ciy" :class="{hui:cityInfo.t=='请选择县区'}" @click="clickCity3">{{cityInfo.t}}</div>
+                    </div>
+                </div>
+                <div class="rtb_aress_item">
+                    <div class="rtb_aress_label">详细地址</div>
+                    <input type="text" placeholder="请输入详细收货地址" v-model="address" class="rtb_aress_input" />
+                </div>
+                <div class="rtb_aress_item">
+                    <div class="rtb_aress_label">留言</div>
+                    <textarea  placeholder="选填，如备用手机、商品规格、配送时间、或者其他需求！" rows="3" v-model="ps" class="rtb_aress_input"></textarea>
+                </div>
+                <div class="rtb_aress_item">
+                    <div class="rtb_aress_label">付款方式</div>
+                    <div class="rtb_aress_dk"></div>
+                </div>
+            </div>
+            <div class="sub_btn" @click="submit">填写好了，立即提交订单</div>
+            <div class="rtb_fhtz" v-if="deliverList && deliverList.length>0">发货通知</div>
+            <div class="rtb_fhtz_lists" v-if="deliverList && deliverList.length>0">
+                <div class="swiper-container swiper-container4 swiper-no-swiping">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide rtb_fhtz_item" v-for="item in deliverList">
+                            {{item.notice}}
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="rtb_bah"><span class="num">黔ICP备10001658号-1</span></div>
+            <a class="rtb_buy" href="#buy">立即购买</a>
+        </div>
+        <van-popup 
+            v-model:show="cityType"
+            round
+            close-icon="close"
+            position="bottom"
+        >
+            <div class="chose_city">
+                <div class="cct_main clearfix">
+                    <div class="cct_item fl" v-for="(item, index) in cityList" @click="choseCity1(item, index)" :class="{on:index==cuurrindexCity1}">{{item.name}}</div>
+                </div>
+            </div>
+        </van-popup>
+        <van-popup 
+            v-model:show="cityType2"
+            round
+            close-icon="close"
+            position="bottom"
+        >
+            <div class="chose_city">
+                <div class="cct_main clearfix">
+                    <div class="cct_item fl" v-for="(item, index) in cityList2" @click="choseCity2(item, index)" :class="{on:index==cuurrindexCity2}">{{item.name}}</div>
+                </div>
+            </div>
+        </van-popup>
+        <van-popup 
+            v-model:show="cityType3"
+            round
+            close-icon="close"
+            position="bottom"
+        >
+            <div class="chose_city">
+                <div class="cct_main clearfix">
+                    <div class="cct_item fl" v-for="(item, index) in cityList3" @click="choseCity3(item, index)" :class="{on:index==cuurrindexCity3}">{{item.name}}</div>
+                </div>
+            </div>
+        </van-popup>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#rushBuy',
+            data: {
+                swiper: null,
+                swiperDood: null,
+                swiperPasen: null,
+                swiperDeliver: null,
+                currenIndex: null,
+                countObj: {
+                    d: '',
+                    h: '03',
+                    m: '00',
+                    s: '00'
+                },
+                picList: [],
+                price: 1499,
+                soldNum: 8421,
+                remark: '【自营】贵州飞天茅台53°500ml酱香型白酒，限时特惠，限量1000箱，货到付款，7天无理由退货！',
+                videoUrl: '',
+                salesDesc:'',
+                goodsList: [],
+                timer: null,
+                tipsType: false,
+                tipsText: '',
+                tipsTextList: [],
+                deliverList: [],
+                evaluateList: ['口感不错(321)', '物流很快(962)', '正宗飞天(887)', '比较满意(542)', '绵柔酱香(155)', '馈赠佳品(152)', '酒不错(1252)', '高端大气(371)', '好喝不醉(598)'],
+                sppjList: [],
+                khpjList: [],
+                paenStauList: [],
+                paenText: '',
+                paenMoney: 0,
+                paenOneMoney: 0,
+                onlDetailUrl: '',
+                paenNum: 1,
+                paenId: 1,
+                name: '',
+                phone: '',
+                cityInfo: {
+                    c: '请选择省份',
+                    i: '请选择城市',
+                    t: '请选择县区'
+                },
+                address: '',
+                ps: '',
+                cityList:[],
+                cityList2:[],
+                cityList3:[],
+                cityType: false,
+                cityType2: false,
+                cityType3: false,
+                cuurrindexCity1: null,
+                cuurrindexCity2: null,
+                cuurrindexCity3: null,
+            },
+            created: function () {
+                
+            },
+            mounted: function () {
+                var self = this
+                self.loadInfo()
+                self.loadBuylist()
+                self.loadNoticelist()
+                self.loadEvaluatelist()
+                self.countTime()
+                self.cityList = cityInfoList
+            },
+            methods: {
+                //===获取页面信息
+                loadInfo: function () {
+                    var self = this
+                    $.ajax({
+                        url: 'http://www.moutaii.com/moutai/api/goods/get',
+                        dataType: 'json',
+                        type: 'get',
+                        ajax_name: 'get',
+                        data: {
+                            id: 1
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (res) {
+                            if (res) {
+                                if (res.bannerUrl && res.bannerUrl.length>0){
+                                    self.picList = res.bannerUrl
+                                    setTimeout(function(){
+                                        self.initSwiper()
+                                    },300)
+                                    self.onlDetailUrl = res.bannerUrl[0]
+                                }
+                                if (res.detailUrl && res.detailUrl.length>0){
+                                    self.goodsList = res.detailUrl
+                                }
+                                if (res.setMealVOList && res.setMealVOList.length>0){
+                                    self.paenStauList = res.setMealVOList
+                                    self.paenText = res.setMealVOList[0].name
+                                    self.paenMoney = res.setMealVOList[0].price
+                                    self.paenOneMoney = res.setMealVOList[0].price
+                                    self.paenId = res.setMealVOList[0].id
+                                }
+                                self.price = res.price?res.price : 1499
+                                self.soldNum = res.soldNum?res.soldNum : 8421
+                                self.remark = res.remark?res.remark : '【自营】贵州飞天茅台53°500ml酱香型白酒，限时特惠，限量1000箱，货到付款，7天无理由退货！'
+                                self.videoUrl = res.videoUrl?res.videoUrl:''
+                                self.salesDesc = res.salesDesc?res.salesDesc:'感谢您参与”贵州茅台酒股份有限公司年末抢购“活动每人仅限抢购1次，限购2箱，售完即止！请您详细填写订单信息，下单地址不详，则视为自动放弃抢购资格！'
+                            }
+                            
+                        },
+                        error: function (e) {
+                        }
+                    })
+                },
+                //===发货通知
+                loadNoticelist: function () {
+                    var self = this
+                    $.ajax({
+                        url: 'http://www.moutaii.com/moutai/api/notice/list',
+                        dataType: 'json',
+                        type: 'get',
+                        ajax_name: 'get',
+                        data: {},
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (res) {
+                            if (res && res.length>0){
+                                self.deliverList = res
+                                setTimeout(function(){
+                                    self.initSwiper4()
+                                },300)
+                            }
+                        },
+                        error: function (e) {
+                        }
+                    })
+                },
+                //===商品评价及客户评价
+                loadEvaluatelist: function () {
+                    var self = this
+                    $.ajax({
+                        url: 'http://www.moutaii.com/moutai/api/evaluate/list',
+                        dataType: 'json',
+                        type: 'get',
+                        ajax_name: 'get',
+                        data: {},
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (res) {
+                            if (res) {
+                                if (res.goodsEvaluationVOList && res.goodsEvaluationVOList.length>0){
+                                    self.sppjList = res.goodsEvaluationVOList
+                                    setTimeout(function(){
+                                        self.initSwiper2()
+                                    },300)
+                                }
+                                if (res.customerEvaluationVOList && res.customerEvaluationVOList.length>0){
+                                    self.khpjList = res.customerEvaluationVOList
+                                    setTimeout(function(){
+                                        self.initSwiper3()
+                                    },300)
+                                }
+                            }
+                        },
+                        error: function (e) {
+                        }
+                    })
+                },
+                clickCity1: function() {
+                    this.cityType = true
+                },
+                choseCity1: function(item, index){
+                    var self = this
+                    this.cuurrindexCity1 = index
+                    self.cityList.forEach(function(sitem){
+                        if (item.code == sitem.code) {
+                            self.cityList2 = sitem.children
+                        }
+                    });
+                    console.error(self.cityList2, 111111111)
+                    this.cityInfo.c = item.name
+                    this.cityInfo.i = '请选择城市'
+                    this.cityInfo.t = '请选择县区'
+                    this.cuurrindexCity2 = null
+                    this.cityType = false
+                    this.cityType2 = true
+                },
+                clickCity2: function() {
+                    if (this.cityInfo.c == '请选择省份') {
+                        this.cityType = true
+                    } else {
+                        this.cityType2 = true
+                    }
+                },
+                choseCity2: function(item, index){
+                    var self = this
+                    this.cuurrindexCity2 = index
+                    self.cityList2.forEach(function(sitem){
+                        if (item.code == sitem.code) {
+                            self.cityList3 = sitem.children
+                        }
+                    });
+                    console.error(self.cityList3, 111111111)
+                    this.cityInfo.i = item.name
+                    this.cityInfo.t = '请选择县区'
+                    this.cuurrindexCity3 = null
+                    this.cityType2 = false
+                    this.cityType3 = true
+                },
+                clickCity3: function() {
+                    if (this.cityInfo.c == '请选择省份') {
+                        this.cityType = true
+                    } else if (this.cityInfo.i == '请选择城市') {
+                        this.cityType2 = true
+                    } else {
+                        this.cityType3 = true
+                    }
+                },
+                choseCity3: function(item, index){
+                    this.cuurrindexCity3 = index
+                    this.cityInfo.t = item.name
+                    this.cityType3 = false
+                },
+                choseTc: function(item, index) {
+                    this.paenId = item.id
+                    this.currenIndex = index
+                    this.paenText = item.name
+                    this.paenMoney = item.price * this.paenNum
+                    this.paenOneMoney = item.price
+                },
+                clickJian: function(){
+                    if (this.paenNum > 1) {
+                        this.paenNum = this.paenNum - 1
+                        this.paenMoney = Number(this.paenOneMoney) * this.paenNum
+                    }
+                },
+                clickAdd: function(){
+                    this.paenNum = this.paenNum + 1
+                    this.paenMoney = Number(this.paenOneMoney) * this.paenNum
+                },
+                //===提交
+                submit: function () {
+                    var self = this
+                    if (!self.name) {
+                        vant.Toast("请输入收货姓名")
+                        return false
+                    } else if (!self.phone) {
+                        vant.Toast("请输入手机号码")
+                        return false
+                    } else if (!self.address) {
+                        vant.Toast("请输入详细收货地址")
+                        return false
+                    }
+                    $.ajax({
+                        url: 'http://www.moutaii.com/moutai/api/order/save',
+                        dataType: 'json',
+                        type: 'post',
+                        ajax_name: 'save',
+                        data: JSON.stringify({
+                            goodsId: self.paenId,
+                            num: self.paenNum,
+                            paymentType: 1,
+                            name: self.name,
+                            phone: self.phone,
+                            province: self.cityInfo.c,
+                            city: self.cityInfo.i,
+                            area: self.cityInfo.t,
+                            address: self.address,
+                            remark: self.ps
+                        }),
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        contentType : "application/json;charset=UTF-8",
+                        // contentType:'application/json',
+                        crossDomain: true,
+                        success: function (res) {
+                            vant.Dialog.alert({
+                                title: '提示',
+                                message: '预购成功，稍后会有工作人员与你取得联系',
+                                confirmButtonText: '我知道了',
+                                confirmButtonColor: '#222'
+                            }).then(function() {});
+                        },
+                        error: function (e) {
+                            vant.Toast("服务异常，请稍后重试")
+                        }
+                    })
+                },
+                //===商品抢购人员
+                loadBuylist: function () {
+                    var self = this
+                    $.ajax({
+                        url: 'http://www.moutaii.com/moutai/api/goods/buylist',
+                        dataType: 'json',
+                        type: 'get',
+                        ajax_name: 'get',
+                        data: {},
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (res) {
+                            if (res && res.length>0){
+                                self.tipsTextList = res
+                                setTimeout(function(){
+                                    self.downTime()
+                                },300)
+                            }
+                        },
+                        error: function (e) {
+                        }
+                    })
+                },
+                downTime: function () {
+                    var self = this
+                    if (!self.tipsTextList || self.tipsTextList.length < 1) {
+                        clearInterval(self.timer)
+                        return
+                    }
+                    self.timer =  setInterval(function(){
+                        self.tipsShow()
+                    },4000)
+                },
+                tipsShow: function () {
+                    var self = this
+                    var length = self.tipsTextList.length - 1
+                    var num = Math.ceil(Math.random() * length)
+                    self.tipsText = self.tipsTextList[num].text
+                    self.tipsType = true
+                    setTimeout(function(){
+                        self.tipsType = false
+                    },3000)
+                },
+                countTime: function () {
+                    var self = this
+                    var time = 3 * 60 * 60
+                    var countDown = setInterval(function () {
+                        self.showtime(time)
+                        if (time > 0) {
+                            time--
+                        } else {
+                            time = 3 * 60 * 60
+                            //clearInterval(countDown)
+                        }
+                    }, 1000)
+                },
+                //===未开始倒计时
+                showtime: function (time) {
+                    var lefttime = time //距离结束时间的秒
+                    this.countObj.d = this.fillUp(Math.floor(lefttime / (60 * 60 * 24))) //计算天数
+                    this.countObj.h = this.fillUp(Math.floor((lefttime / (60 * 60)) % 24)) //计算小时数
+                    this.countObj.m = this.fillUp(Math.floor((lefttime / (60)) % 60)) //计算分钟数
+                    this.countObj.s = this.fillUp(Math.floor(lefttime % 60))
+                },
+                fillUp: function (num) {
+                    return num < 10 ? '0' + num : '' + num
+                },
+                //==名单轮播
+                initSwiper: function() {
+                    var self = this
+                    self.swiper = new Swiper('.swiper-container1', {
+                        loop: true,
+                        // autoplay:true,
+                    });
+                },
+                //==商品评价
+                initSwiper2: function() {
+                    var self = this
+                    self.swiperDood = new Swiper('.swiper-container2', {
+                        loop: true,
+                        slidesPerView : 2,
+                        autoplay:true,
+                        // allowTouchMove: false,
+                        direction: 'vertical',
+                    });
+                },
+                //==商品评价
+                initSwiper3: function() {
+                    var self = this
+                    self.swiperPasen = new Swiper('.swiper-container3', {
+                        loop: true,
+                        slidesPerView : 4,
+                        autoplay:true,
+                        // allowTouchMove: false,
+                        direction: 'vertical',
+                    });
+                },
+                //==发货通知
+                initSwiper4: function() {
+                    var self = this
+                    self.swiperDeliver = new Swiper('.swiper-container4', {
+                        loop: true,
+                        slidesPerView : 8,
+                        autoplay:true,
+                        // allowTouchMove: false,
+                        direction: 'vertical',
+                    });
+                },
+                // 时间戳转换格式
+				getMonthDay: function (value) {
+					// 格式化YYYY.MM.DD
+					if (!value) return ''
+					var value = value.replace(/-/g, "/");
+                    var T = new Date(value);
+					var Y = T.getFullYear()
+					var M = T.getMonth() + 1
+					M = M < 10 ? '0' + M : M
+					var D = T.getDate()
+					D = D < 10 ? '0' + D : D
+					var h = T.getHours() // getHours方法返回 Date 对象的小时 (0 ~ 23)
+					h = h < 10 ? '0' + h : h
+					var m = T.getMinutes() // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+					m = m < 10 ? '0' + m : m
+					var s = T.getSeconds() // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+					s = s < 10 ? '0' + s : s
+					return M + '月' + D + '日'
+				},
+            }
+        });
+    </script>
+</body>
+
+</html>
